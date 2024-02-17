@@ -10,12 +10,15 @@ const Sales = require("../models/sales.model");
 const addSalesHandler = async (req, res) => {
   try {
     const salesDetails = req.body;
+
     const newSale = new Sales(salesDetails);
+    await newSale.save();
     if (!newSale) {
       return res
         .status(404)
         .json({ success: false, message: "sales not created." });
     }
+
     return res
       .status(200)
       .json({ success: true, message: "sales created.", sales: newSale });
@@ -37,8 +40,11 @@ const addSalesHandler = async (req, res) => {
  */
 const fetchSalesHandler = async (req, res) => {
   try {
-    const allSalesItems = await Sales.find();
-    if (allSalesItems.length === 0) {
+    const allSalesItems = await Sales.find().populate({
+      path: "item",
+      select: "name price category quantity",
+    });
+    if (!allSalesItems) {
       return res
         .status(404)
         .json({ success: false, message: "soled items not found." });

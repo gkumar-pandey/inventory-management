@@ -2,9 +2,9 @@ const Item = require("../models/item.model");
 
 /**
  * @route POST /api/v1/items
- * @description Create a new item in database of inventory.
- * @param {Object} req Express request object contan
- * @param {*} res
+ * @description Create a new item in the database inventory.
+ * @param {Object} req - Express request object containing the item details in the request body.
+ * @param {Object} res - Express response object containing success or failure of the operation along with created item.
  */
 const addItemHandler = async (req, res) => {
   try {
@@ -14,7 +14,7 @@ const addItemHandler = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "Item is created.",
-      data: { item: newItem },
+      item: newItem,
     });
   } catch (error) {
     console.error(error);
@@ -33,7 +33,7 @@ const addItemHandler = async (req, res) => {
  */
 const updateItemHandler = async (req, res) => {
   try {
-    const itemId = req.params;
+    const { itemId } = req.params;
     const updatedData = req.body;
     const updatedItem = await Item.findByIdAndUpdate(itemId, updatedData, {
       new: true,
@@ -46,7 +46,7 @@ const updateItemHandler = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Item updated successfully.",
-      data: { item: updatedItem },
+      item: updatedItem,
     });
   } catch (error) {
     console.error(error);
@@ -65,7 +65,8 @@ const updateItemHandler = async (req, res) => {
  */
 const deleteItemHandler = async (req, res) => {
   try {
-    const itemId = req.params;
+    const { itemId } = req.params;
+
     const deletedItem = await Item.findByIdAndDelete(itemId);
     if (!deletedItem) {
       return res.status(404).json({

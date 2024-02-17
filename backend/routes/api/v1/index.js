@@ -5,9 +5,9 @@ const itemsRoutes = require("./items.route");
 const salesRoute = require("./sales.route");
 
 // Items routes
-routes.use(itemsRoutes);
+routes.use("/items", itemsRoutes);
 
 // sales routes
-routes.use(salesRoute);
+routes.use("/sales", salesRoute);
 
 module.exports = routes;
